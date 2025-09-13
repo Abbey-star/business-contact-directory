@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Business Contacts Directory</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-top: 1.5rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #2c3e50 0%, #4ca1af 100%);
+            color: white;
+            padding: 1.8rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-weight: 600;
+            font-size: 1.9rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background: #4ca1af;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #3d8d9a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 2rem;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eaeaea;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 15px;
+            flex: 1;
+            max-width: 600px;
+        }
+        
+        .search-box {
+            position: relative;
+            flex: 1;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 45px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #4ca1af;
+            box-shadow: 0 0 0 3px rgba(76, 161, 175, 0.2);
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+        
+        .filter-select {
+            padding: 0 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            min-width: 150px;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 1.2rem 2rem;
+            background: white;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 0 1.5rem;
+            border-right: 1px solid #eee;
+            flex: 1;
+        }
+        
+        .stat-item:last-child {
+            border-right: none;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            max-height: 500px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        th {
+            background: #f8f9fa;
+            color: #2c3e50;
+            padding: 1.2rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        th:hover {
+            background: #e9ecef;
+        }
+        
+        th i {
+            margin-left: 8px;
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+        
+        th.sort-asc i, th.sort-desc i {
+            opacity: 1;
+        }
+        
+        tbody tr {
+            background: white;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        tbody tr:hover {
+            background: #f8f9fa;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        td {
+            padding: 1.3rem 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            position: relative;
+        }
+        
+        .company-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .company-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .contact-cell {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .contact-name {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .contact-email {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 3px;
+        }
+        
+        .country-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .country-flag {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .action-cell {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 0.5rem;
+            border-radius: 6px;
+            background: #f8f9fa;
+            color: #6c757d;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .action-btn:hover {
+            background: #e9ecef;
+            color: #4ca1af;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 2rem;
+            align-items: center;
+            border-top: 1px solid #eaeaea;
+        }
+        
+        .pagination-info {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .pagination-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .pagination-btn {
+            padding: 0.6rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .pagination-btn:hover {
+            background: #f8f9fa;
+            border-color: #ccc;
+        }
+        
+        .pagination-btn.active {
+            background: #4ca1af;
+            color: white;
+            border-color: #4ca1af;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+            border-top: 1px solid #eaeaea;
+            background: #f8f9fa;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.03);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .highlight {
+            background-color: rgba(76, 161, 175, 0.1) !important;
+            animation: pulse 1s ease;
+        }
+        
+        .export-options {
+            display: flex;
+            gap: 10px;
+        }
+        
+        @media (max-width: 992px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+                padding: 1.5rem;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .search-container {
+                max-width: 100%;
+            }
+            
+            .stats-bar {
+                flex-wrap: wrap;
+            }
+            
+            .stat-item {
+                flex: 1 0 33%;
+                border-right: none;
+                border-bottom: 1px solid #eee;
+                padding: 1rem;
+            }
+            
+            .stat-item:nth-child(3) {
+                border-bottom: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .pagination {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            th, td {
+                padding: 1rem 0.8rem;
+            }
+            
+            .action-cell {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background: white;
+            border-left: 4px solid #4ca1af;
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-address-book"></i> Business Contacts Directory</h1>
+            <div class="header-actions">
+                <button class="btn btn-primary" id="addBtn"><i class="fas fa-plus"></i> Add New Contact</button>
+                <button class="btn btn-secondary" id="helpBtn"><i class="fas fa-question-circle"></i> Help</button>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search companies, contacts, or countries...">
+                </div>
+                <select class="filter-select" id="countryFilter">
+                    <option value="">All Countries</option>
+                    <option value="Germany">Germany</option>
+                    <option value="Mexico">Mexico</option>
+                    <option value="Austria">Austria</option>
+                    <option value="UK">UK</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Italy">Italy</option>
+                </select>
+            </div>
+            <div class="export-options">
+                <button class="btn btn-secondary" id="exportBtn"><i class="fas fa-download"></i> Export</button>
+            </div>
+        </div>
+        
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value">6</div>
+                <div class="stat-label">Total Companies</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Countries</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Team Members</div>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Company <i class="fas fa-sort"></i></th>
+                        <th onclick="sortTable(1)">Contact <i class="fas fa-sort"></i></th>
+                        <th onclick="sortTable(2)">Country <i class="fas fa-sort"></i></th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td>
+                            <div class="company-cell">
+                                <div class="company-logo">A</div>
+                                <span>Alfreds Futterkiste</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="contact-cell">
+                                <span class="contact-name">Maria Anders</span>
+                                <span class="contact-email">maria.anders@company.com</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="country-cell">
+                                <img src="https://flagcdn.com/w40/de.png" class="country-flag">
+                                <span>Germany</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-cell">
+                                <div class="action-btn" title="Edit"><i class="fas fa-edit"></i></div>
+                                <div class="action-btn" title="Delete"><i class="fas fa-trash"></i></div>
+                                <div class="action-btn" title="View Profile"><i class="fas fa-eye"></i></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="company-cell">
+                                <div class="company-logo">C</div>
+                                <span>Centro comercial Moctezuma</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="contact-cell">
+                                <span class="contact-name">Francisco Chang</span>
+                                <span class="contact-email">francisco.chang@company.com</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="country-cell">
+                                <img src="https://flagcdn.com/w40/mx.png" class="country-flag">
+                                <span>Mexico</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-cell">
+                                <div class="action-btn" title="Edit"><i class="fas fa-edit"></i></div>
+                                <div class="action-btn" title="Delete"><i class="fas fa-trash"></i></div>
+                                <div class="action-btn" title="View Profile"><i class="fas fa-eye"></i></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="company-cell">
+                                <div class="company-logo">E</div>
+                                <span>Ernst Handel</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="contact-cell">
+                                <span class="contact-name">Roland Mendel</span>
+                                <span class="contact-email">roland.mendel@company.com</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="country-cell">
+                                <img src="https://flagcdn.com/w40/at.png" class="country-flag">
+                                <span>Austria</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-cell">
+                                <div class="action-btn" title="Edit"><i class="fas fa-edit"></i></div>
+                                <div class="action-btn" title="Delete"><i class="fas fa-trash"></i></div>
+                                <div class="action-btn" title="View Profile"><i class="fas fa-eye"></i></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="company-cell">
+                                <div class="company-logo">I</div>
+                                <span>Island Trading</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="contact-cell">
+                                <span class="contact-name">Helen Bennett</span>
+                                <span class="contact-email">helen.bennett@company.com</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="country-cell">
+                                <img src="https://flagcdn.com/w40/gb.png" class="country-flag">
+                                <span>UK</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-cell">
+                                <div class="action-btn" title="Edit"><i class="fas fa-edit"></i></div>
+                                <div class="action-btn" title="Delete"><i class="fas fa-trash"></i></div>
+                                <div class="action-btn" title="View Profile"><i class="fas fa-eye"></i></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="company-cell">
+                                <div class="company-logo">L</div>
+                                <span>Laughing Bacchus Winecellars</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="contact-cell">
+                                <span class="contact-name">Yoshi Tannamuri</span>
+                                <span class="contact-email">yoshi.tannamuri@company.com</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="country-cell">
+                                <img src="https://flagcdn.com/w40/ca.png" class="country-flag">
+                                <span>Canada</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-cell">
+                                <div class="action-btn" title="Edit"><i class="fas fa-edit"></i></div>
+                                <div class="action-btn" title="Delete"><i class="fas fa-trash"></i></div>
+                                <div class="action-btn" title="View Profile"><i class="fas fa-eye"></i></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="company-cell">
+                                <div class="company-logo">M</div>
+                                <span>Magazzini Alimentari Riuniti</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="contact-cell">
+                                <span class="contact-name">Giovanni Rovelli</span>
+                                <span class="contact-email">giovanni.rovelli@company.com</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="country-cell">
+                                <img src="https://flagcdn.com/w40/it.png" class="country-flag">
+                                <span>Italy</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-cell">
+                                <div class="action-btn" title="Edit"><i class="fas fa-edit"></i></div>
+                                <div class="action-btn" title="Delete"><i class="fas fa-trash"></i></div>
+                                <div class="action-btn" title="View Profile"><i class="fas fa-eye"></i></div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="pagination">
+            <div class="pagination-info">
+                Showing 1-6 of 6 entries
+            </div>
+            <div class="pagination-controls">
+                <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 Business Contacts Directory | Last updated: Today | <i class="fas fa-shield-alt"></i> Secure Data</p>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle" style="color: #4ca1af;"></i>
+        <span>Action completed successfully!</span>
+    </div>
+
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchText = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#tableBody tr');
+            
+            rows.forEach(row => {
+                const cells = row.getElementsByTagName('td');
+                let found = false;
+                
+                for (let i = 0; i < cells.length - 1; i++) { // Skip actions column
+                    const cellText = cells[i].textContent.toLowerCase();
+                    if (cellText.includes(searchText)) {
+                        found = true;
+                        
+                        // Highlight the matching text
+                        if (searchText.length > 0) {
+                            const regex = new RegExp(`(${searchText})`, 'gi');
+                            cells[i].innerHTML = cells[i].textContent.replace(regex, '<span class="highlight">$1</span>');
+                        }
+                    }
+                }
+                
+                row.style.display = found ? '' : 'none';
+            });
+        });
+        
+        // Country filter functionality
+        document.getElementById('countryFilter').addEventListener('change', function() {
+            const country = this.value;
+            const rows = document.querySelectorAll('#tableBody tr');
+            
+            rows.forEach(row => {
+                const countryCell = row.querySelector('.country-cell span:last-child');
+                if (!country || countryCell.textContent === country) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        // Sort table functionality
+        function sortTable(columnIndex) {
+            const table = document.querySelector('table');
+            const tbody = document.getElementById('tableBody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const header = table.querySelectorAll('th')[columnIndex];
+            const isAscending = header.classList.contains('sort-asc');
+            
+            // Reset sort indicators
+            table.querySelectorAll('th').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+                th.querySelector('i').className = 'fas fa-sort';
+            });
+            
+            // Set sort indicator for current column
+            if (isAscending) {
+                header.classList.add('sort-desc');
+                header.querySelector('i').className = 'fas fa-sort-down';
+            } else {
+                header.classList.add('sort-asc');
+                header.querySelector('i').className = 'fas fa-sort-up';
+            }
+            
+            // Sort rows
+            rows.sort((a, b) => {
+                const aValue = a.querySelectorAll('td')[columnIndex].textContent.trim();
+                const bValue = b.querySelectorAll('td')[columnIndex].textContent.trim();
+                
+                return isAscending ? bValue.localeCompare(aValue) : aValue.localeCompare(bValue);
+            });
+            
+            // Remove existing rows
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+            
+            // Add sorted rows with animation
+            rows.forEach((row, index) => {
+                row.style.animationDelay = `${index * 0.05}s`;
+                tbody.appendChild(row);
+            });
+            
+            // Show notification
+            showNotification(`Sorted by ${header.textContent.trim()} ${isAscending ? 'descending' : 'ascending'}`);
+        }
+        
+        // Add row animation on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('#tableBody tr');
+            rows.forEach((row, index) => {
+                row.style.animationDelay = `${index * 0.1}s`;
+            });
+            
+            // Initialize tooltips
+            document.querySelectorAll('.action-btn').forEach(btn => {
+                btn.addEventListener('mouseover', function() {
+                    this.setAttribute('data-tooltip', this.getAttribute('title'));
+                    this.removeAttribute('title');
+                });
+                
+                btn.addEventListener('mouseout', function() {
+                    this.setAttribute('title', this.getAttribute('data-tooltip'));
+                });
+            });
+        });
+        
+        // Add button functionality
+        document.getElementById('addBtn').addEventListener('click', function() {
+            showNotification('Add new contact dialog would open here');
+        });
+        
+        // Export button functionality
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            showNotification('Data exported successfully!');
+        });
+        
+        // Help button functionality
+        document.getElementById('helpBtn').addEventListener('click', function() {
+            showNotification('Help documentation would open here');
+        });
+        
+        // Action buttons functionality
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.querySelector('i').className;
+                let message = '';
+                
+                if (action.includes('edit')) message = 'Edit action initiated';
+                else if (action.includes('trash')) message = 'Delete action initiated';
+                else if (action.includes('eye')) message = 'View profile action initiated';
+                
+                showNotification(message);
+            });
+        });
+        
+        // Notification function
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.querySelector('span').textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
